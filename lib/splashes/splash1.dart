@@ -1,3 +1,4 @@
+import 'package:agendacliente/modelo/singleton.dart';
 import 'package:agendacliente/pages/home.dart';
 import 'package:flutter/material.dart';
 
@@ -12,12 +13,15 @@ class _Splash1State extends State<Splash1> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-      );
-    });
+    espera();
+  }
+
+  Future<void> espera() async {
+    await PrefsService.instance.init();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const Home()),
+    );
   }
 
   @override

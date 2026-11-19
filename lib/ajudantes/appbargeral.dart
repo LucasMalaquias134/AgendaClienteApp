@@ -1,3 +1,4 @@
+import 'package:agendacliente/modelo/singleton.dart';
 import 'package:flutter/material.dart';
 
 class Appbargeral extends StatelessWidget implements PreferredSizeWidget {
@@ -10,7 +11,7 @@ class Appbargeral extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(
-        "Usuário",
+        PrefsService.instance.usuario?.name ?? 'Usuário',
         style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
       ),
       backgroundColor: Color.fromARGB(255, 19, 13, 38),
