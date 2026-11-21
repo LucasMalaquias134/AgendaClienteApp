@@ -6,12 +6,7 @@ class User {
   String? urlImage;
   int cor;
 
-  User({
-    this.name = 'Usuáriosss',
-    this.email,
-    this.urlImage,
-    required this.cor,
-  });
+  User({this.name, this.email, this.urlImage, required this.cor});
 
   Map<String, dynamic> toMap() {
     return {'name': name, 'email': email, 'urlImage': urlImage, 'cor': cor};
