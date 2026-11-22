@@ -23,4 +23,41 @@ class Usercontroller {
       return false;
     }
   }
+
+  static Future<bool> apagarImg() async {
+    try {
+      User? usuario = await LocalStorageService.carregarUsuario();
+      if (usuario == null) {
+        return false;
+      } else {
+        usuario.urlImage = '';
+        await LocalStorageService.salvarUsuario(usuario);
+        return true;
+      }
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  static Future<bool> salvarImg(String url) async {
+    try {
+      User? usuario = await LocalStorageService.carregarUsuario();
+
+      if (usuario != null) {
+        usuario.urlImage = url;
+
+        await LocalStorageService.salvarUsuario(usuario);
+
+        return true;
+      } else {
+        User usuario = User(urlImage: url, cor: 1);
+        await LocalStorageService.salvarUsuario(usuario);
+        return true;
+      }
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

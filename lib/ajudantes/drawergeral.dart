@@ -1,4 +1,5 @@
 import 'package:agendacliente/pages/configuracao.dart';
+import 'package:agendacliente/pages/home.dart';
 import 'package:flutter/material.dart';
 
 class Drawergeral extends StatefulWidget {
@@ -19,18 +20,40 @@ class _DrawergeralState extends State<Drawergeral> {
             decoration: BoxDecoration(color: Colors.blue),
             child: Text('Cabeçalho', style: TextStyle(color: Colors.white)),
           ),
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('Configurações'),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const Configuracao()),
-              );
-            },
+          ajudaRapida(titulo: 'Home', widgeta: Home(), icone: Icon(Icons.home)),
+          ajudaRapida(
+            titulo: 'Configurações',
+            widgeta: Configuracao(),
+            icone: Icon(Icons.settings),
           ),
         ],
       ),
+    );
+  }
+}
+
+class ajudaRapida extends StatelessWidget {
+  final String titulo;
+  final Widget widgeta;
+  final Icon icone;
+  const ajudaRapida({
+    required this.titulo,
+    required this.widgeta,
+    required this.icone,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: icone,
+      title: Text(titulo),
+      onTap: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => widgeta),
+        );
+      },
     );
   }
 }

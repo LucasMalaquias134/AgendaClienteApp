@@ -2,10 +2,13 @@ import 'package:agendacliente/ajudantes/appbargeral.dart';
 import 'package:agendacliente/ajudantes/drawergeral.dart';
 import 'package:agendacliente/ajudantes/textfieldajudante.dart';
 import 'package:agendacliente/controle/usercontroller.dart';
+import 'package:agendacliente/modelo/classes/user.dart';
+import 'package:agendacliente/modelo/local_storage_service.dart';
 import 'package:agendacliente/modelo/singleton.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-//enum AcaoMenu { editar, compartilhar, excluir }
+import 'dart:io';
 
 class Configuracao extends StatefulWidget {
   const new({super.key});
@@ -15,12 +18,42 @@ class Configuracao extends StatefulWidget {
 }
 
 class _ConfiguracaoState extends State<Configuracao> {
-  String _ultimaAcao = 'Nenhuma ação selecionada';
-
   TextEditingController namecontroller = TextEditingController();
   TextEditingController emailcontroller = TextEditingController();
 
+  User usuario = User(cor: 1);
+
   final formKey = GlobalKey<FormState>();
+
+  String? imagemSelecionada;
+  final ImagePicker picker = ImagePicker();
+
+  Future<void> _pegarImagem() async {
+    final XFile? arquivo = await picker.pickImage(source: ImageSource.gallery);
+    if (arquivo != null) {
+      final String caminhoImagem = arquivo.path;
+      await Usercontroller.salvarImg(caminhoImagem);
+
+      setState(() {
+        imagemSelecionada = caminhoImagem;
+        usuario.urlImage = imagemSelecionada;
+      });
+    }
+  }
+
+  Future<void> carregarDados() async {
+    try {
+      User usuarioAchado =
+          (await LocalStorageService.carregarUsuario()) ?? (User(cor: 1));
+      setState(() {
+        usuario = usuarioAchado;
+        namecontroller.text = usuario.name ?? '';
+        emailcontroller.text = usuario.email ?? '';
+      });
+    } catch (e) {
+      print("Sem dados persistidos ( metodo carregar dados ) $e");
+    }
+  }
 
   @override
   void dispose() {
@@ -32,8 +65,7 @@ class _ConfiguracaoState extends State<Configuracao> {
   @override
   void initState() {
     super.initState();
-    namecontroller.text = PrefsService.instance.usuario?.name ?? '';
-    emailcontroller.text = PrefsService.instance.usuario?.email ?? '';
+    carregarDados();
   }
 
   void enviar() async {
@@ -51,12 +83,8 @@ class _ConfiguracaoState extends State<Configuracao> {
           ),
         );
         setState(() {
-          PrefsService.instance.salvarNome(
-            namecontroller.text,
-            emailcontroller.text,
-            null,
-            null,
-          );
+          usuario.name = namecontroller.text;
+          usuario.email = emailcontroller.text;
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -82,7 +110,7 @@ class _ConfiguracaoState extends State<Configuracao> {
               child: Text('Cancelar'),
             ),
             FilledButton(
-              onPressed: () => Navigator.of(context).pop(3),
+              onPressed: () => Navigator.of(context).pop(2),
               child: Text('Editar'),
             ),
           ],
@@ -90,15 +118,39 @@ class _ConfiguracaoState extends State<Configuracao> {
       },
     );
 
-    switch (confirmado) {
-      case 2:
-        break;
-      case 3:
-        break;
+    if (confirmado == 2) {
+      _pegarImagem();
     }
+  }
+
+  Future<void> apagaFoto(BuildContext context) async {
+    final bool? confirmado = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Deletar Foto'),
+          content: Text('Deseja realmente apagar sua foto?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text('Cancelar'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text('Apagar'),
+            ),
+          ],
+        );
+      },
+    );
 
     if (confirmado == true) {
-      // Execute a ação confirmada aqui
+      bool resultado = await Usercontroller.apagarImg();
+      if (resultado) {
+        setState(() {
+          usuario.urlImage = '';
+        });
+      }
     }
   }
 
@@ -125,16 +177,25 @@ class _ConfiguracaoState extends State<Configuracao> {
                             PopupMenuButton<String>(
                               iconColor: Colors.white,
                               position: PopupMenuPosition.under,
-                              onSelected: (String opcao) {
+                              onSelected: (String opcao) async {
                                 switch (opcao) {
                                   case '1':
                                     editarFoto(context);
                                     break;
                                   case '2':
+                                    apagaFoto(context);
                                     break;
                                   case '3':
                                     break;
-                                  default:
+                                  case '4':
+                                    bool resultado =
+                                        await LocalStorageService.apagarUsuario();
+                                    if (resultado) {
+                                      setState(() {
+                                        usuario = User(cor: 1);
+                                      });
+                                    }
+                                    break;
                                 }
                               },
                               itemBuilder: (BuildContext context) => const [
@@ -166,6 +227,22 @@ class _ConfiguracaoState extends State<Configuracao> {
                                   child: ListTile(
                                     leading: Icon(Icons.color_lens),
                                     title: Text('Cores'),
+                                    contentPadding: EdgeInsets.zero,
+                                  ),
+                                ),
+                                PopupMenuItem<String>(
+                                  value: '4',
+                                  child: ListTile(
+                                    leading: Icon(Icons.person),
+                                    title: Text('Deletar User'),
+                                    contentPadding: EdgeInsets.zero,
+                                  ),
+                                ),
+                                PopupMenuItem<String>(
+                                  value: '5',
+                                  child: ListTile(
+                                    leading: Icon(Icons.shield),
+                                    title: Text('Segurança'),
                                     contentPadding: EdgeInsets.zero,
                                   ),
                                 ),
@@ -201,16 +278,14 @@ class _ConfiguracaoState extends State<Configuracao> {
                                 Textfieldajudante(
                                   placeHolder: 'Nome',
                                   labelFlutante: true,
-                                  placeHolder2:
-                                      PrefsService.instance.usuario?.name,
+                                  placeHolder2: usuario.name,
                                   controller: namecontroller,
                                 ),
                                 SizedBox(height: 20),
                                 Textfieldajudante(
                                   placeHolder: 'Email',
                                   labelFlutante: true,
-                                  placeHolder2:
-                                      PrefsService.instance.usuario?.email,
+                                  placeHolder2: usuario.email,
                                   controller: emailcontroller,
                                   validador: (p0) {
                                     if (p0 == null || p0.trim().isEmpty) {
@@ -255,16 +330,29 @@ class _ConfiguracaoState extends State<Configuracao> {
                       ),
                     ],
                   ),
+                  /*  */
                   Positioned(
                     top: 15,
                     child: CircleAvatar(
                       radius: 60,
-                      backgroundColor: const Color(0xFF1B1437),
-                      child: const Icon(
-                        Icons.person,
-                        size: 50,
-                        color: Colors.white,
-                      ),
+                      backgroundColor: Color.fromARGB(255, 19, 13, 38),
+                      child:
+                          usuario.urlImage == null || usuario.urlImage!.isEmpty
+                          ? const Icon(
+                              Icons.person,
+                              size: 50,
+                              color: Colors.white,
+                            )
+                          : ClipOval(
+                              child: SizedBox(
+                                width: 110,
+                                height: 110,
+                                child: Image.file(
+                                  File(usuario.urlImage!),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                 ],
@@ -274,7 +362,7 @@ class _ConfiguracaoState extends State<Configuracao> {
         ),
       ),
       drawer: Drawergeral(),
-      appBar: Appbargeral(),
+      appBar: Appbargeral(titulo: 'Configurações'),
     );
   }
 }

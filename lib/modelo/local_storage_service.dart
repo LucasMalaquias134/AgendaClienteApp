@@ -21,5 +21,21 @@ class LocalStorageService {
 
     return User.fromMap(json.decode(usuariosJson));
   }
+
+  //========================================================================================
+
+  static Future<bool> apagarUsuario() async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove(LISTA_USERS);
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  //========================================================================================
+
   //===============================================================================================
 }
