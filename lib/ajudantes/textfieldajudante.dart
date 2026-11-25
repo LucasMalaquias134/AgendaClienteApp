@@ -56,9 +56,7 @@ class Textfieldajudante extends StatelessWidget {
                     : null,
                 labelText: placeHolder,
                 labelStyle: TextStyle(
-                  color: temaEscuro == true
-                      ? Colors.black.withValues(alpha: 0.7)
-                      : Colors.white,
+                  color: temaEscuro == true ? Colors.black : Colors.white,
                   fontFamily: 'fredoka',
                   fontSize: 18,
                 ),
@@ -106,9 +104,7 @@ class Textfieldajudante extends StatelessWidget {
                     : null,
                 labelText: placeHolder,
                 labelStyle: TextStyle(
-                  color: temaEscuro == true
-                      ? Colors.black.withValues(alpha: 0.7)
-                      : Colors.white,
+                  color: temaEscuro == true ? Colors.black : Colors.white,
                   fontFamily: 'fredoka',
                   fontSize: 18,
                 ),

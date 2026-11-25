@@ -1,3 +1,5 @@
+import 'package:agendacliente/ajudantes/cores.dart';
+import 'package:agendacliente/modelo/singleton.dart';
 import 'package:agendacliente/pages/configuracao.dart';
 import 'package:agendacliente/pages/home.dart';
 import 'package:flutter/material.dart';
@@ -12,19 +14,34 @@ class Drawergeral extends StatefulWidget {
 class _DrawergeralState extends State<Drawergeral> {
   @override
   Widget build(BuildContext context) {
+    Map<String, Color> cores = corAjuda.getMetod(PrefsService.instance.cor);
     return Drawer(
-      backgroundColor: Color.fromARGB(255, 36, 23, 76),
+      backgroundColor: cores['corDeFundoPrincipal'],
       child: ListView(
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blue),
-            child: Text('Cabeçalho', style: TextStyle(color: Colors.white)),
+          SizedBox(height: 25),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'AgendaCli',
+                style: TextStyle(color: cores['corDeBotao'], fontSize: 30),
+              ),
+            ],
           ),
-          ajudaRapida(titulo: 'Home', widgeta: Home(), icone: Icon(Icons.home)),
+          SizedBox(height: 25),
           ajudaRapida(
-            titulo: 'Configurações',
+            titulo: Text('Home', style: TextStyle(color: cores['corDeTexto'])),
+            widgeta: Home(),
+            icone: Icon(Icons.home, color: cores['corDeTexto']),
+          ),
+          ajudaRapida(
+            titulo: Text(
+              'Configurações',
+              style: TextStyle(color: cores['corDeTexto']),
+            ),
             widgeta: Configuracao(),
-            icone: Icon(Icons.settings),
+            icone: Icon(Icons.settings, color: cores['corDeTexto']),
           ),
         ],
       ),
@@ -33,7 +50,7 @@ class _DrawergeralState extends State<Drawergeral> {
 }
 
 class ajudaRapida extends StatelessWidget {
-  final String titulo;
+  final Widget titulo;
   final Widget widgeta;
   final Icon icone;
   const ajudaRapida({
@@ -47,7 +64,7 @@ class ajudaRapida extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: icone,
-      title: Text(titulo),
+      title: titulo,
       onTap: () {
         Navigator.pushReplacement(
           context,

@@ -1,8 +1,8 @@
 import 'package:agendacliente/modelo/local_storage_service.dart';
 
 class PrefsService {
-  PrefsService();
-  static final PrefsService instance = PrefsService();
+  PrefsService._();
+  static final PrefsService instance = PrefsService._();
 
   int cor = 1;
 

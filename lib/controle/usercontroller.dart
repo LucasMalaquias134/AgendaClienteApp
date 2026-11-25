@@ -60,4 +60,25 @@ class Usercontroller {
       return false;
     }
   }
+
+  static Future<bool> salvarCor(int valor) async {
+    try {
+      User? usuario = await LocalStorageService.carregarUsuario();
+
+      if (usuario != null) {
+        usuario.cor = valor;
+
+        await LocalStorageService.salvarUsuario(usuario);
+
+        return true;
+      } else {
+        User usuario = User(cor: valor);
+        await LocalStorageService.salvarUsuario(usuario);
+        return true;
+      }
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

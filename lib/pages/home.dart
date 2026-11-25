@@ -1,5 +1,7 @@
 import 'package:agendacliente/ajudantes/appbargeral.dart';
+import 'package:agendacliente/ajudantes/cores.dart';
 import 'package:agendacliente/ajudantes/drawergeral.dart';
+import 'package:agendacliente/modelo/singleton.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -12,8 +14,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    Map<String, Color> cores = corAjuda.getMetod(PrefsService.instance.cor);
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 36, 23, 76),
+      backgroundColor: cores['corDeFundoPrincipal'],
       body: Center(
         child: Padding(
           padding: EdgeInsetsGeometry.all(10),
