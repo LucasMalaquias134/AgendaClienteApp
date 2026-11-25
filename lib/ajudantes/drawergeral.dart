@@ -31,9 +31,12 @@ class _DrawergeralState extends State<Drawergeral> {
           ),
           SizedBox(height: 25),
           ajudaRapida(
-            titulo: Text('Home', style: TextStyle(color: cores['corDeTexto'])),
+            titulo: Text(
+              'Sua Agenda',
+              style: TextStyle(color: cores['corDeTexto']),
+            ),
             widgeta: Home(),
-            icone: Icon(Icons.home, color: cores['corDeTexto']),
+            icone: Icon(Icons.calendar_month, color: cores['corDeTexto']),
           ),
           ajudaRapida(
             titulo: Text(

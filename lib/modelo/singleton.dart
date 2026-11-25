@@ -5,8 +5,10 @@ class PrefsService {
   static final PrefsService instance = PrefsService._();
 
   int cor = 1;
+  String? senha;
 
   Future<void> init() async {
     cor = (await LocalStorageService.carregarUsuario())?.cor ?? 1;
+    senha = (await LocalStorageService.carregarSenha())?.senha;
   }
 }

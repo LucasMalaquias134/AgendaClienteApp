@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
         ),
       ),
       drawer: Drawergeral(),
-      appBar: Appbargeral(titulo: 'Home'),
+      appBar: Appbargeral(titulo: 'Sua Agenda'),
     );
   }
 }

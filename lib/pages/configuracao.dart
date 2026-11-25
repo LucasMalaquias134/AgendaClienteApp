@@ -2,6 +2,7 @@ import 'package:agendacliente/ajudantes/appbargeral.dart';
 import 'package:agendacliente/ajudantes/cores.dart';
 import 'package:agendacliente/ajudantes/drawergeral.dart';
 import 'package:agendacliente/ajudantes/textfieldajudante.dart';
+import 'package:agendacliente/controle/passwordcontroller.dart';
 import 'package:agendacliente/controle/usercontroller.dart';
 import 'package:agendacliente/modelo/classes/user.dart';
 import 'package:agendacliente/modelo/local_storage_service.dart';
@@ -21,12 +22,15 @@ class Configuracao extends StatefulWidget {
 class _ConfiguracaoState extends State<Configuracao> {
   TextEditingController namecontroller = TextEditingController();
   TextEditingController emailcontroller = TextEditingController();
+  TextEditingController passwordcontroller = TextEditingController();
 
-  bool isSwitched = false;
+  bool isSwitched = (PrefsService.instance.cor == 1) ? false : true;
+  bool isSwitched2 = (PrefsService.instance.senha == null) ? false : true;
 
   User usuario = User(cor: 1);
 
   final formKey = GlobalKey<FormState>();
+  final formKey2 = GlobalKey<FormState>();
 
   bool carregando = true;
 
@@ -54,6 +58,7 @@ class _ConfiguracaoState extends State<Configuracao> {
         usuario = usuarioAchado;
         namecontroller.text = usuario.name ?? '';
         emailcontroller.text = usuario.email ?? '';
+        passwordcontroller.text = PrefsService.instance.senha ?? '';
         carregando = false;
       });
     } catch (e) {
@@ -72,11 +77,6 @@ class _ConfiguracaoState extends State<Configuracao> {
   void initState() {
     super.initState();
     carregarDados();
-    if (PrefsService.instance.cor == 1) {
-      isSwitched = false;
-    } else {
-      isSwitched = true;
-    }
   }
 
   void enviar() async {
@@ -105,6 +105,36 @@ class _ConfiguracaoState extends State<Configuracao> {
           ),
         );
       }
+    }
+  }
+
+  void enviar2() async {
+    if (formKey2.currentState!.validate()) {
+      bool resultado = await Passwordcontroller.salvarSenha(
+        passwordcontroller.text,
+      );
+      if (resultado) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Salvo Com sucesso'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Algo deu errado, tente novamente'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Preencha o campo da senha ou desative a segurança'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -207,15 +237,6 @@ class _ConfiguracaoState extends State<Configuracao> {
                                         case '2':
                                           apagaFoto(context);
                                           break;
-                                        case '3':
-                                          bool resultado =
-                                              await LocalStorageService.apagarUsuario();
-                                          if (resultado) {
-                                            setState(() {
-                                              usuario = User(cor: 1);
-                                            });
-                                          }
-                                          break;
                                       }
                                     },
                                     itemBuilder: (BuildContext context) =>
@@ -241,23 +262,6 @@ class _ConfiguracaoState extends State<Configuracao> {
                                                   color: Colors.red,
                                                 ),
                                               ),
-                                              contentPadding: EdgeInsets.zero,
-                                            ),
-                                          ),
-                                          PopupMenuDivider(),
-                                          PopupMenuItem<String>(
-                                            value: '3',
-                                            child: ListTile(
-                                              leading: Icon(Icons.person),
-                                              title: Text('Deletar User'),
-                                              contentPadding: EdgeInsets.zero,
-                                            ),
-                                          ),
-                                          PopupMenuItem<String>(
-                                            value: '4',
-                                            child: ListTile(
-                                              leading: Icon(Icons.shield),
-                                              title: Text('Segurança'),
                                               contentPadding: EdgeInsets.zero,
                                             ),
                                           ),
@@ -352,10 +356,10 @@ class _ConfiguracaoState extends State<Configuracao> {
                             child:
                                 usuario.urlImage == null ||
                                     usuario.urlImage!.isEmpty
-                                ? const Icon(
+                                ? Icon(
                                     Icons.person,
                                     size: 50,
-                                    color: Colors.white,
+                                    color: cores['corDeTexto'],
                                   )
                                 : ClipOval(
                                     child: SizedBox(
@@ -381,11 +385,19 @@ class _ConfiguracaoState extends State<Configuracao> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Tema Do App :",
-                            style: TextStyle(
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Icon(
+                              Icons.color_lens,
                               color: cores['corDeTexto'],
-                              fontSize: 25,
+                              size: 30,
+                            ),
+                            title: Text(
+                              "Tema Do App",
+                              style: TextStyle(
+                                color: cores['corDeTexto'],
+                                fontSize: 25,
+                              ),
                             ),
                           ),
                           Row(
@@ -422,6 +434,111 @@ class _ConfiguracaoState extends State<Configuracao> {
                               ),
                             ],
                           ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Container(
+                      padding: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: cores['corDeFundo2'],
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Icon(
+                              Icons.shield,
+                              color: cores['corDeTexto'],
+                              size: 30,
+                            ),
+                            title: Text(
+                              "Segurança",
+                              style: TextStyle(
+                                color: cores['corDeTexto'],
+                                fontSize: 25,
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Switch(
+                                value: isSwitched2,
+                                onChanged: (bool novoValor) async {
+                                  if (novoValor == false) {
+                                    bool resultado =
+                                        await Passwordcontroller.apagaSenha();
+                                    passwordcontroller.text = '';
+                                    if (resultado == false) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Algo deu errado, tente novamente',
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    }
+                                  }
+                                  setState(() {
+                                    isSwitched2 = novoValor;
+                                  });
+                                },
+                                activeThumbColor: Color.fromARGB(
+                                  255,
+                                  63,
+                                  81,
+                                  181,
+                                ),
+                              ),
+                              Text(
+                                isSwitched2 ? "Ativado" : "Desativado",
+                                style: TextStyle(
+                                  color: cores['corDeTexto'],
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (isSwitched2) ...[
+                            SizedBox(height: 15),
+                            Form(
+                              key: formKey2,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Textfieldajudante(
+                                    temaEscuro: (PrefsService.instance.cor == 1)
+                                        ? false
+                                        : true,
+                                    placeHolder: 'Senha',
+                                    placeHolder2: passwordcontroller.text,
+                                    eSenha: true,
+                                    controller: passwordcontroller,
+                                    validador: (p0) {
+                                      if (p0 == null || p0.trim().isEmpty) {
+                                        return 'É necessário preencher esse campo!';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  SizedBox(height: 15),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: cores['corDeBotao'],
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    onPressed: enviar2,
+                                    child: Text('Salvar Senha'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ),
