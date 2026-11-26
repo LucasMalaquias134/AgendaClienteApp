@@ -3,6 +3,7 @@ import 'package:agendacliente/ajudantes/cores.dart';
 import 'package:agendacliente/ajudantes/drawergeral.dart';
 import 'package:agendacliente/modelo/singleton.dart';
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class Home extends StatefulWidget {
   const new({super.key});
@@ -12,6 +13,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  DateTime? _selectedDay;
+
   @override
   Widget build(BuildContext context) {
     Map<String, Color> cores = corAjuda.getMetod(PrefsService.instance.cor);
@@ -22,11 +25,24 @@ class _HomeState extends State<Home> {
           padding: EdgeInsetsGeometry.all(10),
           child: ListView(
             children: [
-              Container(height: 200, color: Colors.lightBlue),
-              Container(height: 200, color: Colors.amber),
-              Container(height: 200, color: Colors.blue),
-              Container(height: 200, color: Colors.green),
-              Container(height: 200, color: Colors.red),
+              TableCalendar(
+                locale: 'pt_BR',
+                firstDay: DateTime.now().add(Duration(days: -365)),
+                lastDay: DateTime.now().add(Duration(days: 365)),
+                focusedDay: DateTime.now(),
+                selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                onDaySelected: (selectedDay, focusedDay) {
+                  print(
+                    'selectedDay + $selectedDay --------- focusedDay + $focusedDay ',
+                  );
+                  setState(() {
+                    _selectedDay = selectedDay;
+                  });
+                },
+                // onPageChanged: (focusedDay) {
+                //   _focusedDay = focusedDay;
+                // },
+              ),
             ],
           ),
         ),
