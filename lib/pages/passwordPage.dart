@@ -57,7 +57,7 @@ class Passwordpage extends StatelessWidget {
             padding: EdgeInsets.all(15),
             decoration: BoxDecoration(
               color: cores['corDeFundo2'],
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(15),
             ),
             height: 200,
             child: Column(

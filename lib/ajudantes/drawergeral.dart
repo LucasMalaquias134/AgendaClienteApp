@@ -1,7 +1,10 @@
 import 'package:agendacliente/ajudantes/cores.dart';
 import 'package:agendacliente/modelo/singleton.dart';
+import 'package:agendacliente/pages/clientesPage.dart';
 import 'package:agendacliente/pages/configuracao.dart';
 import 'package:agendacliente/pages/home.dart';
+import 'package:agendacliente/pages/saldoPage.dart';
+import 'package:agendacliente/pages/servicosPage.dart';
 import 'package:flutter/material.dart';
 
 class Drawergeral extends StatefulWidget {
@@ -38,6 +41,34 @@ class _DrawergeralState extends State<Drawergeral> {
             widgeta: Home(),
             icone: Icon(Icons.calendar_month, color: cores['corDeTexto']),
           ),
+          SizedBox(height: 25),
+          ajudaRapida(
+            titulo: Text(
+              'Seus Clientes',
+              style: TextStyle(color: cores['corDeTexto']),
+            ),
+            widgeta: Clientespage(),
+            icone: Icon(Icons.person, color: cores['corDeTexto']),
+          ),
+          SizedBox(height: 25),
+          ajudaRapida(
+            titulo: Text(
+              'Seus serviços',
+              style: TextStyle(color: cores['corDeTexto']),
+            ),
+            widgeta: Servicospage(),
+            icone: Icon(Icons.format_list_bulleted, color: cores['corDeTexto']),
+          ),
+          SizedBox(height: 25),
+          ajudaRapida(
+            titulo: Text(
+              'Evolução do saldo',
+              style: TextStyle(color: cores['corDeTexto']),
+            ),
+            widgeta: Saldopage(),
+            icone: Icon(Icons.show_chart, color: cores['corDeTexto']),
+          ),
+          SizedBox(height: 25),
           ajudaRapida(
             titulo: Text(
               'Configurações',

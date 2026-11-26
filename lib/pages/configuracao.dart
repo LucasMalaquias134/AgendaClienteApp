@@ -275,7 +275,7 @@ class _ConfiguracaoState extends State<Configuracao> {
                               decoration: BoxDecoration(
                                 color: cores['corDeFundo2'],
                                 borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(24),
+                                  top: Radius.circular(15),
                                 ),
                               ),
                             ),
@@ -283,7 +283,7 @@ class _ConfiguracaoState extends State<Configuracao> {
                               decoration: BoxDecoration(
                                 color: cores['corDeFundo2'],
                                 borderRadius: BorderRadius.vertical(
-                                  bottom: Radius.circular(24),
+                                  bottom: Radius.circular(15),
                                 ),
                               ),
                               //MUDA A COR AQUIIIIII
@@ -380,7 +380,7 @@ class _ConfiguracaoState extends State<Configuracao> {
                       padding: EdgeInsets.all(15),
                       decoration: BoxDecoration(
                         color: cores['corDeFundo2'],
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(15),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -442,7 +442,7 @@ class _ConfiguracaoState extends State<Configuracao> {
                       padding: EdgeInsets.all(15),
                       decoration: BoxDecoration(
                         color: cores['corDeFundo2'],
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(15),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

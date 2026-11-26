@@ -10,10 +10,12 @@ class Textfieldajudante extends StatelessWidget {
   final TextEditingController controller;
   final bool? numerico;
   final String? Function(String?)? validador;
+  final Function(String?)? enviado;
   final bool? labelFlutante;
   final bool? temaEscuro;
   final bool? temRadius;
   final double? radius;
+  final Color? backgroundCor;
 
   const Textfieldajudante({
     super.key,
@@ -25,10 +27,12 @@ class Textfieldajudante extends StatelessWidget {
     this.numerico,
     required this.controller,
     this.validador,
+    this.enviado,
     this.labelFlutante,
     this.temaEscuro,
     this.temRadius,
     this.radius,
+    this.backgroundCor,
   });
 
   @override
@@ -38,13 +42,18 @@ class Textfieldajudante extends StatelessWidget {
       color: Colors.transparent,
       child: numerico == true
           ? TextFormField(
+              onFieldSubmitted: enviado,
               validator: validador,
               style: TextStyle(
                 color: temaEscuro == true ? Colors.black : Colors.white,
-                fontFamily: 'fredoka',
+
                 fontSize: 14,
               ),
               decoration: InputDecoration(
+                filled: (backgroundCor != null) ? true : false,
+                fillColor: (backgroundCor != null)
+                    ? backgroundCor
+                    : Colors.transparent,
                 floatingLabelBehavior: labelFlutante == true
                     ? FloatingLabelBehavior.always
                     : null,
@@ -57,7 +66,7 @@ class Textfieldajudante extends StatelessWidget {
                 labelText: placeHolder,
                 labelStyle: TextStyle(
                   color: temaEscuro == true ? Colors.black : Colors.white,
-                  fontFamily: 'fredoka',
+
                   fontSize: 18,
                 ),
                 hintText: placeHolder2 != null ? placeHolder2 : placeHolder,
@@ -65,13 +74,8 @@ class Textfieldajudante extends StatelessWidget {
                   color: temaEscuro == true
                       ? Colors.black.withValues(alpha: 0.4)
                       : Colors.white.withValues(alpha: 0.4),
-                  fontFamily: 'fredoka',
+
                   fontSize: 14,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: temRadius == true
-                      ? BorderRadius.circular(radius!)
-                      : BorderRadius.circular(15),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: temRadius == true
@@ -79,20 +83,36 @@ class Textfieldajudante extends StatelessWidget {
                       : BorderRadius.circular(15),
                   borderSide: BorderSide(color: Colors.indigo),
                 ),
+                border: OutlineInputBorder(
+                  borderRadius: temRadius == true
+                      ? BorderRadius.circular(radius!)
+                      : BorderRadius.circular(15),
+                ),
               ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              cursorColor: Colors.indigo,
+              keyboardType: const TextInputType.numberWithOptions(
+                signed: true,
+                decimal: false,
+              ),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^[0-9\-+]*$')),
+              ],
               obscureText: eSenha == null ? false : true,
               controller: controller,
             )
           : TextFormField(
+              onFieldSubmitted: enviado,
               validator: validador,
               style: TextStyle(
                 color: temaEscuro == true ? Colors.black : Colors.white,
-                fontFamily: 'fredoka',
+
                 fontSize: 14,
               ),
               decoration: InputDecoration(
+                filled: (backgroundCor != null) ? true : false,
+                fillColor: (backgroundCor != null)
+                    ? backgroundCor
+                    : Colors.transparent,
                 floatingLabelBehavior: labelFlutante == true
                     ? FloatingLabelBehavior.always
                     : null,
@@ -105,7 +125,7 @@ class Textfieldajudante extends StatelessWidget {
                 labelText: placeHolder,
                 labelStyle: TextStyle(
                   color: temaEscuro == true ? Colors.black : Colors.white,
-                  fontFamily: 'fredoka',
+
                   fontSize: 18,
                 ),
                 hintText: placeHolder2 != null ? placeHolder2 : placeHolder,
@@ -113,19 +133,19 @@ class Textfieldajudante extends StatelessWidget {
                   color: temaEscuro == true
                       ? Colors.black.withValues(alpha: 0.4)
                       : Colors.white.withValues(alpha: 0.4),
-                  fontFamily: 'fredoka',
+
                   fontSize: 14,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: temRadius == true
-                      ? BorderRadius.circular(radius!)
-                      : BorderRadius.circular(15),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: temRadius == true
                       ? BorderRadius.circular(radius!)
                       : BorderRadius.circular(15),
                   borderSide: BorderSide(color: Colors.indigo),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: temRadius == true
+                      ? BorderRadius.circular(radius!)
+                      : BorderRadius.circular(15),
                 ),
               ),
               cursorColor: Colors.indigo,

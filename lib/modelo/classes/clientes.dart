@@ -2,8 +2,8 @@ import 'dart:convert';
 
 class Cliente {
   final int id;
-  final String nome;
-  final String? descricao;
+  String nome;
+  String? descricao;
 
   Cliente({required this.id, required this.nome, required this.descricao});
 
