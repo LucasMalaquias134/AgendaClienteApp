@@ -89,12 +89,14 @@ class _EditaclientepageState extends State<Editaclientepage> {
                 children: [
                   Text(
                     'Nome do Cliente',
-                    style: TextStyle(color: cores['corDeTexto'], fontSize: 20),
+                    style: TextStyle(color: cores['corDeTexto'], fontSize: 17),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
+                  Divider(),
+                  SizedBox(height: 5),
                   Text(
                     widget.cliente.nome,
-                    style: TextStyle(color: cores['corDeTexto']),
+                    style: TextStyle(color: cores['corDeTexto'], fontSize: 17),
                   ),
                 ],
               ),
@@ -111,15 +113,17 @@ class _EditaclientepageState extends State<Editaclientepage> {
                 children: [
                   Text(
                     'Descrição do Cliente',
-                    style: TextStyle(color: cores['corDeTexto'], fontSize: 20),
+                    style: TextStyle(color: cores['corDeTexto'], fontSize: 17),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
+                  Divider(),
+                  SizedBox(height: 5),
                   Text(
                     (widget.cliente.descricao != null &&
                             widget.cliente.descricao!.trim().isNotEmpty)
                         ? widget.cliente.descricao!
                         : 'Sem Descrição',
-                    style: TextStyle(color: cores['corDeTexto']),
+                    style: TextStyle(color: cores['corDeTexto'], fontSize: 17),
                   ),
                 ],
               ),
@@ -161,7 +165,7 @@ class _EditaclientepageState extends State<Editaclientepage> {
                           placeHolder2: '',
                           controller: namecontroller,
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 15),
                         Textfieldajudante(
                           temaEscuro: (PrefsService.instance.cor == 1)
                               ? false

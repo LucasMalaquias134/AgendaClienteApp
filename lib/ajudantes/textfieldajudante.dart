@@ -91,11 +91,11 @@ class Textfieldajudante extends StatelessWidget {
               ),
               cursorColor: Colors.indigo,
               keyboardType: const TextInputType.numberWithOptions(
-                signed: true,
-                decimal: false,
+                signed: false,
+                decimal: true,
               ),
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^[0-9\-+]*$')),
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+[.]?\d*')),
               ],
               obscureText: eSenha == null ? false : true,
               controller: controller,

@@ -39,6 +39,7 @@ class _ClientespageState extends State<Clientespage> {
 
   @override
   void dispose() {
+    pesquisaController.dispose();
     super.dispose();
   }
 
@@ -79,7 +80,7 @@ class _ClientespageState extends State<Clientespage> {
       if (resultado) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Salvo Com sucesso'),
+            content: Text('Apagado Com sucesso'),
             backgroundColor: Colors.green,
           ),
         );

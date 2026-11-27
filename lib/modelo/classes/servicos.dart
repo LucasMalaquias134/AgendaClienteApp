@@ -2,9 +2,9 @@ import 'dart:convert';
 
 class Servico {
   final int id;
-  final String nome;
-  final String? descricao;
-  final int preco;
+  String nome;
+  String? descricao;
+  double preco;
 
   Servico({
     required this.id,
